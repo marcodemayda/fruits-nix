@@ -19,7 +19,7 @@
   services.libinput.enable = true;
 
   users.users.${config.main-user.userName}.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 <host2-pub-key> ${interpolants.general.user}"
+    # "ssh-ed25519 <host2-pub-key> ${interpolants.general.user}"
   ];
 
 }
