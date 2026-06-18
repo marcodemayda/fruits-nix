@@ -14,5 +14,9 @@
 
   config = lib.mkIf config.testing-config.enable {
     warnings = [ "TEST file enabled, did you mean to have it on?" ];
+
+    home-manager.users.${config.main-user.userName} = {
+
+    };
   };
 }
