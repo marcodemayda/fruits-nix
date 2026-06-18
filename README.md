@@ -257,3 +257,13 @@ If this occurs:
   and `<...> 195M May 31 10:50 kernel-7.0.10-<...>.efi`
 - Delete the oldest of each, one `initrd` and one `kernel`, that should be enough
 
+# Manual Steps
+
+## wgnord
+
+You must login once witht he access token. Since it is stored with sops,
+you can simply run
+
+```
+sudo wgnord l "$(sudo cat /run/secrets/wgnord-token)"
+```
