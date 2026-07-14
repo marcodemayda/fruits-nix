@@ -8,6 +8,8 @@ Not even sure it compiles at the moment. Lots to improve.
 
 ## Bootsratp
 
+(from a fresh install)
+
 ### Starter Config
 
 In the starter-config, add/edit the hostname, uncomment openssh,
@@ -38,12 +40,13 @@ This part is the most annoying, since on a non-gui install,
 you'll need to manually type the key, not having any mode of comunication. 
 I haven't thought of a better way... probably would be to temporarily
 use password login on ssh and use another machine
-that has clipboard utilities and browser at hand.
+that has clipboard utilities and browser at hand. 
 
 ### Prepare config
 
 #### Merge with generated
-Copy the generated config so we have them in the folder.
+Copy the generated config so we have them in the config repo.
+I like to just have it the home folder.
 
 ```
 mkdir ~/nixos-config/hosts/<host>/temp
@@ -138,13 +141,13 @@ and replace the bootsraped one in `.sops.yaml` file.
 Reactivate the enviroment variable setting it's path, rebuild and `sops update <file>`.
 
 Now `sops <sops-file.yaml>` requires `sudo`, since it has to fish a root-owned key.
-But besides that, we have one key for both editing and rebuilding.
+But we have one key for both editing and rebuilding. And secrets are 
+locked behind sudo, which I like.
+(we could alternatively manually run the sops command with `SOPS_AGE_KEY_FILE=<path>` each time,
+or with an alias, instead of setting it globally in the config file)
 
 Remeber to re-add the ssh passphrase if you had removed it! `ssh-keygen -p`
-And remove the one in config, `rm -r .config/sops/`
-
-(we could alternatively manually run the sops command with `SOPS_AGE_KEY_FILE=<path>` each time,
-or with an alias, instead of setting it globally in the config. )
+And remove the keys in .config `rm -r .config/sops/`
 
 ### adding new hosts
 
@@ -225,7 +228,7 @@ Find the partitions with `lsblk`,
 (usually `nvme0n1p2` for root and `nvme0n1p3` for swap)
 
 Other potential flags are 1+8+12+13+14:
-- 1: BIOS parameters. Triggers with each hibernate (and generally missbehaves, for me it always triggered, making tpm pointless)
+- 1: BIOS parameters. Triggers with each hibernate (or/and generally missbehaves, for me it always triggered, making tpm pointless)
 - 14: triggers with each nixos rebuild
 
 NOTE: if swap has it's own partition and it is also encrypted, you must enroll (same command with `/dev/<swap-partition>`) it too!
@@ -244,7 +247,7 @@ so reboot twice before debugging.
 ## Troubleshooting
 
 ### /boot full, can't rebuild
-Especially with lanzaboote, especially at version switcher,
+Especially with lanzaboote, especially at nixos version switches,
 `/boot` can fill-up with older generations.
 Because cleanup is done after placing new files, this can block rebuilds
 as boot directory is out of space.
