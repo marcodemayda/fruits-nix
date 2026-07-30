@@ -4,7 +4,6 @@
   },
   "host1": {
     "hostname": "Host1ProperName",
-    "shortname": "host1",
-    "hostpath": "~/nixos-config/hosts/Host1ProperName/"
+    "shortname": "host1"
   }
 }
