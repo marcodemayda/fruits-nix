@@ -4,6 +4,19 @@ Working on making "bare" and "working example"
 versions, right now it's a mish-mash of the two.
 Not even sure it compiles at the moment. Lots to improve.
 
+
+ short first draft of featured ideas:
+
+- modular: its a modular config, of course. You configure some specific thing you may want, and then get to enable or disable it per-host.
+- eval-time secrets; about as close I could get
+  (because it's not fully possible period. NOTE: also that it is only adequate for "privacy" secrets, not actual secrets; they're still placed in the world readable nix store).
+- automatic imports at the top level
+- flake "modules": top-level flake has "flake fruits" that it can import cleanly. The main point is just to leave the top-level flake clean and clear; and leave messy details of specific flake pulls to its own file
+- no new knowledge: 99% of modules are written like you would write any part of your basic modular config; no new conventions to learn
+- homogeneous writing: much like no new knowledge; 99% of modules are written the same. Copy the template, write configuration as you know how to write it.
+
+Ideally, you should be at the "daily driving" level, already be familiar with configuration shenanigans. But should be possible to jump in on day1 of NixOS, since you're just writing nix the same as you're writing it in `configuration.nix` on a fresh install.
+
 # NixOS
 
 ## Bootsratp
