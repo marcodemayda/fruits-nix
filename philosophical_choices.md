@@ -1,17 +1,11 @@
-Some stuff that you might wnat to think about setting up. Here you can sort of see via my bias what motivated choices for this framework.
-
+Some reasoning about opinionated choices of the framework,
+which you may want to divert from for yourself.
 
 ### per-host flake vs monolithic flake
 
 Nix-fruits chooses to have per-host flakes. This means `flake.nix` and `flake.lock`live in each host's own config directory, and pull in `./configuration.nix`
 
-This is opposed to having a single flake at the top of your repo that manages all your hosts. Fret not, this is still modular. The flake would have
-
-```
-nixosConfigurations."${hostName}" = nixpkgs.lib.nixosSystem {
-```
-
-and each such instance would pull the modules `hosts/<host>/configuration.nix`. Tis will still correctly rebuild modularly on each hosts.
+This is opposed to having a single flake at the top of your repo that manages all your hosts. This would still be modular; the flake would have `nixosConfigurations."${hostName}" = ... ` and each such instance would pull the modules `hosts/<host>/configuration.nix`. This will still correctly rebuild modularly on each hosts.
 
 
 ##### pros of per-host:
@@ -24,7 +18,7 @@ and each such instance would pull the modules `hosts/<host>/configuration.nix`. 
 
 ##### pros of mono flake (and relatedly cons of per-host flake):
 - well... one file, tidy (though not internally).
-- one configuration: when making eg a fruit that you definetly want in every machine (eg sops for secrets is needed for rebuilds), you don't have to worry about every machine's file.
+- one configuration: when making eg a fruit that you definetly want in every machine (eg sops for secrets; you'd want on every machine), you don't have to worry about manually checking every machine's file.
 - (maybe?) top level flake in the repo means the flake is exposed where most people/configs assume it to be.
 - TODO: look for more caues idk
 
@@ -46,6 +40,10 @@ I don't feel very strongly about this, and in my own config I mix-and-match base
   - tidier modules, the config lives in the relevant nix module directly for you to see, you don't need to jump to a separate related file.
 - syntax changes becomes an upstream issue (looking at you hyprland).
 
+###### another small difference
+
+I like making the `/files/...` folder, mirroring the structure of where things are hardlinked.
+You might prefer to instead make each config file live near it's relevant module. Eg when configuring alacritty, you'd make a folder `/modules/alacritty` and let both the `.nix` and `.toml` files in there. More cohesive. But sometimes a config is wanted by multiple models, and portability to other distors is more immediate if dotfiles aren't scattered across different folders.
 
 
 ### Nix vs Manual steps
@@ -59,7 +57,6 @@ make your config files do all that stuff.
 
 However, for GUI or "program inernal" options... cater to your wants and capabilities with nix; and in particular the trade-off of pain-to-benefit. eg:
 
-- Configuring dotfiles? Do it with nix (either [[philosophy_choices#dotfiles: nix-ed or hardlinked]])
+- Configuring dotfiles? Do it with nix (either [[philosophical_choices#dotfiles: nix-ed or hardlinked]])
 - Configuring browser extensions... you could do it with nix; but it's not so smooth and easy. And often browsers can sync that stuff on login... Still, it's nice to have a single source of truth on rebuild... So do it if it's not painful relative to your nix level.
-- Setting up website accounts to be auto-logged in: is it possible to automate site logins declaratively with nix? Maybe, idk. But even if it is, it would be an insane effort; and what does it save you? Using a password manager? Not worth it, just leave it as a manual step.
-
+- Setting up website accounts to be auto-logged in: is it possible to automate site logins declaratively with nix and sops? Maybe, idk. But even if it is, it would be an insane effort; and what does it save you? A few logins? Using a password manager? Not worth it, just leave it as a manual step.
