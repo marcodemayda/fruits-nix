@@ -40,7 +40,7 @@ in
       # configured via nix instead, as above
       # xdg.configFile = {
       #   "alacritty" = {
-      #     source = ./../../files/homes/users/dotconfig/alacritty;
+      #     source = ./../../files/home/${config.main-user.userName}/dotconfig/alacritty;
       #     recursive = true;
       #   };
       # };

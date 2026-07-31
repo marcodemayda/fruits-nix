@@ -76,7 +76,7 @@
 
             programs.noctalia = {
               enable = true;
-              settings = ./../../../files/homes/users/dotconfig/noctalia/config.toml;
+              settings = ./../../../files/home/${config.main-user.userName}/dotconfig/noctalia/config.toml;
             };
 
           };

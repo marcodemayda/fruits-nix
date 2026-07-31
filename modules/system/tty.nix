@@ -25,7 +25,7 @@ in
     # but the coloring logic is different for some reason, so it's hard
     console = {
       earlySetup = true;
-      useXkbConfig = true; # uses xserver layout
+      # useXkbConfig = true; # uses xserver layout
       packages = with pkgs; [ terminus_font ];
       font = "ter-220b";
 

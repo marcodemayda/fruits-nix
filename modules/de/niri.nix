@@ -75,7 +75,8 @@ in
       xdg = {
         enable = true;
         configFile."niri/config.kdl".source =
-          "./../../files/home/${config.main-user.userName}/dotconfig/niri/config.kdl";
+          ./../../files/home/${config.main-user.userName}/dotconfig/niri/config.kdl;
+
       };
 
     };

@@ -13,12 +13,12 @@ in
   options.main-user = {
     enable = lib.mkEnableOption "enable user module";
 
-    main-user.userName = lib.mkOption {
+    userName = lib.mkOption {
       default = "mainuser";
       description = "Username for admin user";
     };
 
-    main-user.description = lib.mkOption {
+    description = lib.mkOption {
       default = "Main User";
       description = "Full name / GECOS description for the main user";
     };

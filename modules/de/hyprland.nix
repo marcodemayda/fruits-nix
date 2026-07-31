@@ -49,7 +49,7 @@ in
       xdg = {
         enable = true;
         configFile."hypr" = {
-          source = ./../../files/homes/${config.main-user.userName}/dotconfig/hypr;
+          source = ./../../files/home/${config.main-user.userName}/dotconfig/hypr;
           # whole folder, in case you want to add other hypr-stuff
           recursive = true;
         };

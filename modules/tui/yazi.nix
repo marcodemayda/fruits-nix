@@ -63,7 +63,7 @@ in
           };
         };
 
-        initLua = ./../../files/homes/users/dotconfig/yazi/init.lua;
+        initLua = ./../../files/home/${config.main-user.userName}/dotconfig/yazi/init.lua;
       };
     };
 
