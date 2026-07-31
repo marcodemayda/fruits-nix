@@ -5,15 +5,17 @@
   config,
   ...
 }:
-
+let
+  cfg = config.locales;
+in
 {
-  options = {
-    locales.enable = lib.mkEnableOption "enable module";
+  options.locales = {
+    enable = lib.mkEnableOption "enable module";
   };
 
   config = lib.mkIf config.locales.enable {
 
-    time.timeZone = "Europe/Dublin";
+    time.timeZone = "Europe/London";
 
     # Overall system language
     i18n.defaultLocale = "en_US.UTF-8";

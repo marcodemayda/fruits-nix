@@ -7,12 +7,15 @@
   ...
 }:
 
+let
+  cfg = config.audiodriver;
+in
 {
-  options = {
-    audiodriver.enable = lib.mkEnableOption "enable module";
+  options.audiodriver = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.audiodriver.enable {
+  config = lib.mkIf cfg.enable {
 
     # Enable sound with pipewire.
     services.pulseaudio.enable = false; # older

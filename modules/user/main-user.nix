@@ -5,11 +5,13 @@
   config,
   ...
 }:
-
+let
+  cfg = config.main-user;
+in
 {
 
-  options = {
-    main-user.enable = lib.mkEnableOption "enable user module";
+  options.main-user = {
+    enable = lib.mkEnableOption "enable user module";
 
     main-user.userName = lib.mkOption {
       default = "mainuser";
@@ -22,7 +24,7 @@
     };
   };
 
-  config = lib.mkIf config.main-user.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.${config.main-user.userName} = {
       isNormalUser = true;

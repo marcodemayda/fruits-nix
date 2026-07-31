@@ -1,4 +1,4 @@
-# multiplex.nix
+# sysmonitor.nix
 
 {
   lib,
@@ -7,16 +7,20 @@
   ...
 }:
 let
-  cfg = config.multiplex;
+  cfg = config.sysmonitor;
 in
 {
-  options.multiplex = {
+  options.sysmonitor = {
     enable = lib.mkEnableOption "enable module";
   };
 
   config = lib.mkIf cfg.enable {
+
     environment.systemPackages = with pkgs; [
-      zellij
+      btop
+      # btop-cuda
+      fastfetch
     ];
+
   };
 }

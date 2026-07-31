@@ -7,31 +7,21 @@
   ...
 }:
 
+let
+  cfg = config.hyprland;
+in
 {
   imports = [
     ./wayland.nix
-    ./xorg.nix
-    ./../gui/alacritty.nix
-    ./gshell.nix
-    ./fuzzel.nix
-    ./pcmanfm.nix
   ];
 
-  options = {
-    hyprland.enable = lib.mkEnableOption "enable module";
+  options.hyprland = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.hyprland.enable {
-    # config goes here, then importing and module.enable = true; will make it part of the config
-    wayland = {
-      enable = true;
-      # clipboard = true;
-    };
-    xorg.enable = true;
-    alacritty.enable = true;
-    gshell.enable = true;
-    fuzzel.enable = true;
-    pcmanfm.enable = true;
+  config = lib.mkIf cfg.enable {
+
+    wayland.enable = true;
 
     security.polkit.enable = true; # polkit
     systemd.user.services.polkit-gnome-authentication-agent-1 = {
@@ -53,16 +43,14 @@
     programs.hyprland = {
       enable = true;
       xwayland.enable = true;
-      # unfortunately doesn't remove entry, but doesn't seem to be
-      # a way around it without recompiling hyprland
-      withUWSM = false;
     };
 
     home-manager.users.${config.main-user.userName} = {
       xdg = {
         enable = true;
         configFile."hypr" = {
-          source = ./../../files/homes/users/dotconfig/hypr;
+          source = ./../../files/homes/${config.main-user.userName}/dotconfig/hypr;
+          # whole folder, in case you want to add other hypr-stuff
           recursive = true;
         };
       };

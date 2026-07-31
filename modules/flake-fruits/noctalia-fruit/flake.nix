@@ -60,6 +60,7 @@
           environment.systemPackages = with pkgs-unstable; [
             noctalia-shell
           ];
+
           niri.enable = true;
           hyprland.enable = true;
 

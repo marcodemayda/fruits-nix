@@ -8,15 +8,17 @@
   pkgs-vscodium,
   ...
 }:
-
+let
+  cfg = config.vscodium;
+in
 {
 
-  options = {
-    vscodium.enable = lib.mkEnableOption "enable module";
-    vscodium.nix = lib.mkEnableOption "togglable submodule";
+  options.vscodium = {
+    enable = lib.mkEnableOption "enable module";
+    nix = lib.mkEnableOption "togglable submodule";
   };
 
-  config = lib.mkIf config.vscodium.enable (
+  config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
         home-manager.users.${config.main-user.userName} = {

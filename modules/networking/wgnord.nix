@@ -7,12 +7,15 @@
   ...
 }:
 
+let
+  cfg = config.wgnord;
+in
 {
-  options = {
-    wgnord.enable = lib.mkEnableOption "enable module";
+  options.wgnord = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.wgnord.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
       wgnord
@@ -36,6 +39,8 @@
       Endpoint = SERVER_IP:51820
       PersistentKeepalive = 25
     '';
+
+    sops.secrets.nordvpn-token = { };
 
   };
 

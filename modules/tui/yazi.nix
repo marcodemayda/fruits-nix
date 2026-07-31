@@ -6,29 +6,19 @@
   pkgs,
   ...
 }:
-
+let
+  cfg = config.yazi;
+in
 {
-  options = {
-    yazi.enable = lib.mkEnableOption "enable module";
+  options.yazi = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.yazi.enable {
+  config = lib.mkIf cfg.enable {
 
-    # TODO Maybe try to inject Nix config
-    # with lib.fromToml (or whatever)
     programs = {
       yazi = {
         enable = true;
-        plugins = with pkgs.yaziPlugins; {
-          # remember they're not plug-n-play
-          # you need to edit some of the configs
-          git = git;
-          mount = mount;
-          clipboard = clipboard;
-          # yafg = yafg; # fuzzy finder
-          # yaziPlugins.sudo
-          # restore/recycle-bin
-        };
 
         settings = {
           yazi = {
@@ -78,7 +68,8 @@
     };
 
     home-manager.users.${config.main-user.userName} = {
-
+      # make y a hotkey for yazi, such that exiting yazi cd's into the
+      # directory you visited, not the one you started
       programs.bash.bashrcExtra = ''
         # yazi shell to quit to currenct directory
         function y() {

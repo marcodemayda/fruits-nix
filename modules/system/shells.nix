@@ -6,13 +6,15 @@
   HOSTNAME,
   ...
 }:
-
+let
+  cfg = config.shells;
+in
 {
-  options = {
-    shells.enable = lib.mkEnableOption "enable module";
+  options.shells = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.shells.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.pathsToLink = [ "/share/zsh" ];
 
@@ -22,6 +24,10 @@
 
         programs.bash = {
           enable = true;
+          # NOTE: deafults to test, meaning to actually generate a generation entry you need to explcity
+          # give the "switch" argument instead. I find it usefull not to clutter generations when i'm doing
+          # lots of rebuilds for tests, and instead explcitly add a generation when I know i got things neat and
+          # working
           # AI:
           initExtra = ''
             rebuild() {
@@ -48,13 +54,11 @@
           nixedit = "hx ~/nixos-config";
           nixgit = "lazygit -p ~/nixos-config";
           nixoptimize = "sudo nix-store --optimize";
-          nixgcdel = "sudo nix-collect-garbage -d";
           nixgc = "sudo nix-collect-garbage --delete-older-than 5d";
+          nixgcdel = "sudo nix-collect-garbage -d";
           nixconfig = "y ~/nixos-config";
           nixupdate = "nix flake update --flake ~/nixos-config/hosts/${HOSTNAME}";
 
-          # NOTE: these are handled by rebuild aliases and .gitignore
-          # there might be a nicer solution but it's not easy
           privadd = "git -C ~/nixos-config add -N -f modules/sops/privates.json";
           privund = "git -C ~/nixos-config restore --staged modules/sops/privates.json";
           privenc = ''sudo bash -c "sops -e ~/nixos-config/modules/sops/privates.json > ~/nixos-config/modules/sops/privates_enc.json"'';
@@ -211,25 +215,6 @@
 
             package.disabled = true;
           };
-        };
-
-        # remember, you can always choose what shell should run scripts
-        # with shabangs, and even run emulate bash
-        programs.zsh = {
-          enable = true;
-          enableCompletion = true;
-          autosuggestion.enable = true;
-          syntaxHighlighting.enable = true;
-          autocd = true;
-
-          # 26.05 eval warning, old behaviour
-          dotDir = config.home.homeDirectory;
-
-          #   shellAliases = {
-          #     ll = "ls -l";
-          #     update = "sudo nixos-rebuild switch";
-          #   };
-          #   history.size = 10000;
         };
 
       };

@@ -7,12 +7,15 @@
   ...
 }:
 
+let
+  cfg = config.tty;
+in
 {
-  options = {
-    tty.enable = lib.mkEnableOption "enable module";
+  options.tty = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.tty.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
       brightnessctl
@@ -26,6 +29,8 @@
       packages = with pkgs; [ terminus_font ];
       font = "ter-220b";
 
+      # A sort of gruber-darker theme.
+      # tried my best...
       colors = [
         "000000"
         "ffdd33"

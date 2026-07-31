@@ -6,34 +6,22 @@
   pkgs,
   ...
 }:
-
+let
+  cfg = config.niri;
+in
 {
 
   imports = [
     ./wayland.nix
-    ./xorg.nix
-    ./../gui/alacritty.nix
-    ./gshell.nix
-    ./fuzzel.nix
-    ./pcmanfm.nix
   ];
 
-  options = {
-    niri.enable = lib.mkEnableOption "enable module";
+  options.niri = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.niri.enable {
+  config = lib.mkIf cfg.enable {
 
-    wayland = {
-      enable = true;
-      clipboard = true;
-    };
-
-    xorg.enable = true;
-    alacritty.enable = true;
-    gshell.enable = true;
-    fuzzel.enable = true;
-    pcmanfm.enable = true;
+    wayland.enable = true;
 
     programs = {
       xwayland.enable = true;
@@ -67,7 +55,7 @@
           xdg-desktop-portal-gnome
           # kdePackages.xdg-desktop-portal-kde
         ];
-        config.common.default = "gtk"; # AI suggestion
+        config.common.default = "gtk";
       };
     };
 
@@ -75,7 +63,6 @@
       xwayland-satellite # reccomended for niri
       polkit_gnome
       brightnessctl
-      # stasis # cool but a bit overly complicated
     ];
 
     environment.etc."xdg-desktop-portal/niri-portals.conf".text = ''
@@ -84,6 +71,13 @@
     '';
 
     home-manager.users.${config.main-user.userName} = {
+
+      xdg = {
+        enable = true;
+        configFile."niri/config.kdl".source =
+          "./../../files/home/${config.main-user.userName}/dotconfig/niri/config.kdl";
+      };
+
     };
 
   };

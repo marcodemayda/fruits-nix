@@ -6,14 +6,15 @@
   pkgs,
   ...
 }:
-
+let
+  cfg = config.media;
+in
 {
-  options = {
-    media.enable = lib.mkEnableOption "enable module";
+  options.media = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.media.enable {
-    # config goes here, then importing and module.enable = true; will make it part of the config
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       vlc # video
       qimgv # images

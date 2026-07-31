@@ -21,7 +21,7 @@
 
   file-utilities.enable = lib.mkDefault true;
   yazi.enable = lib.mkDefault true;
-  sysmonitort.enable = lib.mkDefault true;
+  sysmonitor.enable = lib.mkDefault true;
   multiplex.enable = lib.mkDefault true;
 
 }

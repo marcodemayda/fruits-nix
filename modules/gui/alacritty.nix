@@ -6,13 +6,15 @@
   pkgs,
   ...
 }:
-
+let
+  cfg = config.alacritty;
+in
 {
-  options = {
-    alacritty.enable = lib.mkEnableOption "enable module";
+  options.alacritty = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.alacritty.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
       alacritty
@@ -35,6 +37,7 @@
 
       };
 
+      # configured via nix instead, as above
       # xdg.configFile = {
       #   "alacritty" = {
       #     source = ./../../files/homes/users/dotconfig/alacritty;

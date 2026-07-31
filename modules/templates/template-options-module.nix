@@ -6,17 +6,17 @@
 }:
 
 let
-cfg = MODULE
+  cfg = config.MODULE;
 in
 
 {
 
-  options = {
-    MODULE.enable = lib.mkEnableOption "enable module";
-    MODULE.youroption = lib.mkEnableOption "togglable submodule";
+  options.MODULE = {
+    enable = lib.mkEnableOption "enable module";
+    youroption = lib.mkEnableOption "togglable submodule";
   };
 
-  config = lib.mkIf config.MODULE.enable (
+  config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
         # base config, enabled by module

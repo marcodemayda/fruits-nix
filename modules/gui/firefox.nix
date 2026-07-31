@@ -6,13 +6,15 @@
   pkgs,
   ...
 }:
-
+let
+  cfg = config.firefox;
+in
 {
-  options = {
-    firefox.enable = lib.mkEnableOption "enable module";
+  options.firefox = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.firefox.enable {
+  config = lib.mkIf cfg.enable {
 
     # https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265 is promising
     programs.firefox = {
@@ -34,13 +36,6 @@
     programs.firefox.package =
       (pkgs.wrapFirefox.override { libpulseaudio = pkgs.libpressureaudio; }) pkgs.firefox-unwrapped
         { };
-
-    # For screensharing, need pipe-wire
-    # (actually works for me already...)
-    # environment.systemPackages = [
-    #   # Replace pkgs.firefox with:
-    #   (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true;}) {})
-    # ];
 
   };
 }

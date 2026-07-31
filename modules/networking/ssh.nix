@@ -6,13 +6,15 @@
   privates,
   ...
 }:
-
+let
+  cfg = config.ssh;
+in
 {
-  options = {
-    ssh.enable = lib.mkEnableOption "enable module";
+  options.ssh = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.ssh.enable {
+  config = lib.mkIf cfg.enable {
 
     services.openssh = {
       enable = true;

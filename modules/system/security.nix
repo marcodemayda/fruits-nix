@@ -5,14 +5,18 @@
   config,
   ...
 }:
-
+let
+  cfg = config.security;
+in
 {
-  options = {
-    security.enable = lib.mkEnableOption "enable module";
+  options.security = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.security.enable {
+  config = lib.mkIf cfg.enable {
 
+    # if you want to specify some passworldess commands,
+    # such as rebuildling
     security.sudo = {
       enable = true;
       execWheelOnly = true;

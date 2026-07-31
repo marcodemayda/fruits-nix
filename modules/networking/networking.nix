@@ -3,16 +3,17 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
-
+let
+  cfg = config.networking;
+in
 {
-  options = {
-    networking.enable = lib.mkEnableOption "enable module";
+  options.networking = {
+    enable = lib.mkEnableOption "enable module";
   };
 
-  config = lib.mkIf config.networking.enable {
+  config = lib.mkIf cfg.enable {
 
     networking.networkmanager.enable = true;
 

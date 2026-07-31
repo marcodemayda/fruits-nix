@@ -6,14 +6,16 @@
   pkgs,
   ...
 }:
-
+let
+  cfg = config.guest-user;
+in
 {
-  options = {
-    guest-user.enable = lib.mkEnableOption "enable module";
+  options.guest-user = {
+    enable = lib.mkEnableOption "enable module";
 
   };
 
-  config = lib.mkIf config.guest-user.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.guest = {
       isNormalUser = true;
@@ -22,10 +24,6 @@
         "users"
       ];
       password = "guest";
-
-      packages = with pkgs; [
-
-      ];
     };
 
     # reset contents on reboot
