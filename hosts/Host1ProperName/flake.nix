@@ -13,22 +13,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    lanzaboote-fruit = {
-      url = "./../../modules/flake-fruits/lanzaboote-fruit";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    sops-fruit = {
-      url = "./../../modules/flake-fruits/sops-fruit";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    noctalia-fruit = {
-      url = "./../../modules/flake-fruits/noctalia-fruit";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    vscodium-fruit.url = "./../../modules/flake-fruits/vscodium-fruit";
   };
 
   outputs =
@@ -36,10 +20,6 @@
       self,
       nixpkgs,
       nixpkgs-unstable,
-      lanzaboote-fruit,
-      sops-fruit,
-      noctalia-fruit,
-      vscodium-fruit,
       ...
     }@inputs:
     let
@@ -51,7 +31,6 @@
         config.allowUnfree = true;
       };
       interpolants = builtins.fromJSON (builtins.readFile ./../../modules/lib/interpolants.json);
-      privates = builtins.fromJSON (builtins.readFile ./../../modules/sops/privates.json);
       hostName = interpolants.host1.hostname;
     in
     {
@@ -61,7 +40,6 @@
 
         specialArgs = {
           inherit inputs;
-          inherit interpolants privates;
           inherit pkgs-unstable;
           HOSTNAME = hostName;
         };
@@ -69,57 +47,8 @@
           ./configuration.nix
 
           inputs.home-manager.nixosModules.default
-          # clones flake-directory into /etc/current-system-flake for review
-          {
-            environment.etc."current-system-flake".source = builtins.path {
-              path = ./../..; # copies entire host dir including flake.lock into the store
-              name = "${hostName}-config";
-            };
-          }
-          # AI suggests tracking git-tree instead, not sure I agree
-          # {
-          #   environment.etc."current-system-flake".source = builtins.fetchGit {
-          #     url = ./../..;
-          #     # no `rev` = uses current HEAD
-          #   };
-          # }
-
-          lanzaboote-fruit.nixosModules.lanzaboote
-
-          sops-fruit.nixosModules.sops
-
-          noctalia-fruit.nixosModules.noctalia
-
-          (vscodium-fruit.nixosModules.vscodium system)
-
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              extraSpecialArgs = {
-                inherit interpolants privates;
-              };
-            };
-          }
-
-        ];
-      };
-
-      nixosConfigurations."${hostName}-alt" = nixpkgs.lib.nixosSystem {
-        inherit system;
-
-        specialArgs = {
-          inherit inputs;
-          inherit interpolants privates;
-          inherit pkgs-unstable;
-          HOSTNAME = hostName;
-        };
-        modules = [
-          ./configuration-perf.nix
-
-          inputs.home-manager.nixosModules.default
-
-          # clones flake-directory into /etc/current-system-flake for review
+          # clones flake-directory into /etc/current-system-flake
+          # so that each generation contains the config it was generated against.
           {
             environment.etc."current-system-flake".source = builtins.path {
               path = ./../..; # copies entire host dir including flake.lock into the store
@@ -127,23 +56,18 @@
             };
           }
 
-          lanzaboote-fruit.nixosModules.lanzaboote
-
-          sops-fruit.nixosModules.sops
-
-          noctalia-fruit.nixosModules.noctalia
-
           {
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = {
-                inherit interpolants privates;
+                inherit interpolants;
               };
             };
           }
 
         ];
       };
+
     };
 }

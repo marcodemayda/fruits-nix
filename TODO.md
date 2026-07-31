@@ -3,6 +3,7 @@
 You need to do this stuff for the system to rebuild.
 
 - [ ] Follow any TODO present in the nix files. Use any program's global search to find them.
+  - [ ] TODO's tend to come with a warning or assertion which blocks the rebuild. Remove them when done.
 - [ ] check out `interpolants.json` and fill relevant values.
   - [ ] match `hosts/<host>` with your actual `hostname`
   - [ ] match `files/homes/user` with your actual `general.user`.

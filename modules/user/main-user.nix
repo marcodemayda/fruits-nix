@@ -5,24 +5,26 @@
   config,
   ...
 }:
-
+let
+  cfg = config.main-user;
+in
 {
 
-  options = {
-    main-user.enable = lib.mkEnableOption "enable user module";
+  options.main-user = {
+    enable = lib.mkEnableOption "enable user module";
 
-    main-user.userName = lib.mkOption {
+    userName = lib.mkOption {
       default = "mainuser";
       description = "Username for admin user";
     };
 
-    main-user.description = lib.mkOption {
+    description = lib.mkOption {
       default = "Main User";
       description = "Full name / GECOS description for the main user";
     };
   };
 
-  config = lib.mkIf config.main-user.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.${config.main-user.userName} = {
       isNormalUser = true;

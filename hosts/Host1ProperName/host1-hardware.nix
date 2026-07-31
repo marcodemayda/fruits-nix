@@ -7,26 +7,20 @@
 
 {
 
-  imports = [
-    ./../../modules/system/nvidia-shenanigans.nix
-  ];
-
   # generated at install
-  boot.initrd.luks.devices."luks-5aeb1ca5-1713-4b9f-a93f-4eea58edb03f" = {
-    device = "/dev/disk/by-uuid/5aeb1ca5-1713-4b9f-a93f-4eea58edb03f";
-
-    # TPM UNLOCK
-    crypttabExtraOpts = [
-      "tpm2-device=auto"
-      "tpm2-measure-pcr=yes"
-    ];
-
+  boot.initrd.luks.devices."luks-5bab1ca5-1713-4b9f-a93f-4lua58edb03f" = {
+    device = "/dev/disk/by-uuid/5bab1ca5-1713-4b9f-a93f-4lua58edb03f";
   };
-  # TPM UNLOCK
-  boot.initrd.systemd = {
-    enable = true;
-    tpm2.enable = true;
-  };
+  # TODO: if you LUKS encrypted during installation,
+  # in your generated configuration.nix you should have an entry just like the above, but with its own code.
+  # Match it and then delete the assertion
+  # If you didn't LUKS encrypt, ignore this, and delete both the assertion block and the boot.initrd.luks.devices entry
+  assertions = [
+    {
+      assertion = false;
+      message = "If you LUKS encryted you must match your generated boot.initrd.luks.devices";
+    }
+  ];
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -35,7 +29,6 @@
   };
 
   # Configure console keymap
-  # grabbed automatically
-  # console.keyMap = "it";
+  console.keyMap = "en";
 
 }

@@ -27,19 +27,8 @@
     description = "${privates.fullname}";
   };
 
-  bluetooth.enable = true;
-  printing.enable = true;
-  ssh.enable = true;
-
-  audiodriver.enable = true;
-  greetd-tuigreet.enable = true;
-  helix = {
-    enable = true;
-    mdoxide = true;
-  };
-
-  firefox.enable = true;
-  media.enable = true;
+  # TODO: delete warning once done
+  config.warnings = [ "Did you set username and description? \n Did you set hostname?" ];
 
   ####################
   # NIXOS
@@ -51,7 +40,6 @@
     # also pass inputs to home-manager modules
     extraSpecialArgs = {
       inherit inputs;
-      inherit privates;
       mainUserName = config.main-user.userName;
       HOSTNAME = config.networking.hostName;
     };
@@ -59,10 +47,8 @@
       "${config.main-user.userName}" = import ./home.nix;
     };
     sharedModules = [
-      # might need this since configuruation and
-      # home-manager are unified, but not sure,
-      # HM might need secrets defined in its own modules
-      inputs.sops-fruit.homeManagerModules.sops
+      # flake modules to give hm access to,
+      # eg nice for sops-nix
     ];
   };
 
@@ -75,9 +61,6 @@
     "flakes"
   ];
 
-  # make shell command follow your system's packages channel
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -85,5 +68,12 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
+  # TODO: delete assertions once done
+  assertions = [
+    {
+      assertion = false;
+      message = " you MUST match your system stateVersion to the one in your generated config file. \n Delete the assertion block in configuration.nix to continue.";
+    }
+  ];
 
 }
