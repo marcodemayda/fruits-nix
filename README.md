@@ -6,6 +6,7 @@ or slowly transition by grabbing the template files.
 
 ```mermaid
 flowchart BT
+
   subgraph HOST1
     direction BT
     configuration.nix --> flake.nix
@@ -27,11 +28,51 @@ subgraph HOST2
   end
 
 
- subgraph modules
+ subgraph MODULES
+  direction BT
   default.nix --> core.nix
   core.nix --> configuration.nix
   core.nix --> conf2
   all-modules --> default.nix
+    subgraph flake-fruits
+        subgraph module1-fruit
+        flake-fruit[flake.nix] --inputs--> flake.nix
+        end
+        subgraph module2-fruit
+        flake-fruit2[flake.nix] --inputs--> flake2
+        end
+    end
+  endflowchart BT
+
+  subgraph HOST1
+    direction BT
+    configuration.nix --> flake.nix
+    home.nix --> configuration.nix
+    home.nix --inputs&module--- flake.nix
+    host1-config.nix --> configuration.nix
+    host1-hardware.nix --> configuration.nix
+    hardware.nix --> configuration.nix
+  end
+
+subgraph HOST2
+    direction BT
+    conf2[configuration.nix] --> flake2[flake.nix]
+    home2[home.nix] --> conf2
+    home2 --inputs&module--- flake2
+    host2-config.nix --> conf2
+    host2-hardware.nix --> conf2
+    hardware2[hardware.nix] --> conf2
+  end
+
+
+ subgraph MODULES
+  direction BT
+  default.nix --> core.nix
+  core.nix --> configuration.nix
+  core.nix --> conf2
+  module1 --auto --> default.nix
+  module2[...] --auto --> default.nix
+
     subgraph flake-fruits
         subgraph module1-fruit
         flake-fruit[flake.nix] --inputs--> flake.nix
