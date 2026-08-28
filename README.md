@@ -4,6 +4,8 @@ or slowly transition by grabbing the template files.
 
 ## Overview chart
 
+(broken on codeberg for some reason)
+
 ```mermaid
 flowchart BT
 
@@ -34,7 +36,8 @@ subgraph HOST2
   core.nix --> configuration.nix
   core.nix --> conf2
   module1 --auto --> default.nix
-  module2[...] --auto --> default.nix
+  module2 --auto --> default.nix
+  module3[...] --auto --> default.nix
 
     subgraph flake-fruits
         subgraph module1-fruit
