@@ -2,6 +2,47 @@ Bare fruits-nix framework.
 Just a skeleton to get a rough idea of the structure,
 or slowly transition by grabbing the template files.
 
+## Overview chart
+
+```mermaid
+flowchart BT
+  subgraph HOST1
+    direction BT
+    configuration.nix --> flake.nix
+    home.nix --> configuration.nix
+    home.nix --inputs&module--- flake.nix
+    host1-config.nix --> configuration.nix
+    host1-hardware.nix --> configuration.nix
+    hardware.nix --> configuration.nix
+  end
+
+subgraph HOST2
+    direction BT
+    conf2[configuration.nix] --> flake2[flake.nix]
+    home2[home.nix] --> conf2
+    home2 --inputs&module--- flake2
+    host2-config.nix --> conf2
+    host2-hardware.nix --> conf2
+    hardware2[hardware.nix] --> conf2
+  end
+
+
+ subgraph modules
+  default.nix --> core.nix
+  core.nix --> configuration.nix
+  core.nix --> conf2
+  all-modules --> default.nix
+    subgraph flake-fruits
+        subgraph module1-fruit
+        flake-fruit[flake.nix] --inputs--> flake.nix
+        end
+        subgraph module2-fruit
+        flake-fruit2[flake.nix] --inputs--> flake2
+        end
+    end
+  end
+```
+
 
 ## Bootsratp
 
@@ -37,7 +78,7 @@ Adjust accordingly.
 
 #### Merge with generated
 Copy the generated config so we have them in the repo.
-I like to just have it the home folder.
+I like to just have it in the home folder.
 
 ```
 cd <repo>
